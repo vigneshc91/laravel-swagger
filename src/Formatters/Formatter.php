@@ -1,6 +1,6 @@
 <?php
 
-namespace Mtrajano\LaravelSwagger\Formatters;
+namespace Vigneshc91\LaravelSwagger\Formatters;
 
 abstract class Formatter
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Mtrajano\LaravelSwagger\Tests\Parameters;
+namespace Vigneshc91\LaravelSwagger\Tests\Parameters;
 
-use Mtrajano\LaravelSwagger\Tests\TestCase;
-use Mtrajano\LaravelSwagger\Parameters\PathParameterGenerator;
+use Vigneshc91\LaravelSwagger\Tests\TestCase;
+use Vigneshc91\LaravelSwagger\Parameters\PathParameterGenerator;
 
 class PathParameterGeneratorTest extends TestCase
 {

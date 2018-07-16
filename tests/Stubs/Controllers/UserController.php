@@ -1,10 +1,10 @@
 <?php
 
-namespace Mtrajano\LaravelSwagger\Tests\Stubs\Controllers;
+namespace Vigneshc91\LaravelSwagger\Tests\Stubs\Controllers;
 
 use Illuminate\Routing\Controller;
-use Mtrajano\LaravelSwagger\Tests\Stubs\Requests\UserShowRequest;
-use Mtrajano\LaravelSwagger\Tests\Stubs\Requests\UserStoreRequest;
+use Vigneshc91\LaravelSwagger\Tests\Stubs\Requests\UserShowRequest;
+use Vigneshc91\LaravelSwagger\Tests\Stubs\Requests\UserStoreRequest;
 
 class UserController extends Controller
 {

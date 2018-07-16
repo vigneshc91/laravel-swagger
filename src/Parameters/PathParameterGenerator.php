@@ -1,6 +1,6 @@
 <?php
 
-namespace Mtrajano\LaravelSwagger\Parameters;
+namespace Vigneshc91\LaravelSwagger\Parameters;
 
 class PathParameterGenerator implements ParameterGenerator
 {
