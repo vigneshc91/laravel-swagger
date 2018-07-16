@@ -13,6 +13,8 @@ class Generator
 
     protected $routeFilter;
 
+    protected $auth;
+
     protected $docs;
 
     protected $uri;
@@ -23,10 +25,11 @@ class Generator
 
     protected $action;
 
-    public function __construct($config, $routeFilter = null)
+    public function __construct($config, $routeFilter = null, $auth = null)
     {
         $this->config = $config;
         $this->routeFilter = $routeFilter;
+        $this->auth = $auth;
     }
 
     public function generate()
@@ -39,7 +42,7 @@ class Generator
 
             if ($this->routeFilter && !preg_match('/^' . preg_quote($this->routeFilter, '/') . '/', $this->uri)) {
                 continue;
-            }
+            }   
 
             $this->action = $route->getAction('uses');
             $methods = $route->methods();
@@ -47,6 +50,8 @@ class Generator
             if (!isset($this->docs['paths'][$this->uri])) {
                 $this->docs['paths'][$this->uri] = [];
             }
+
+            $this->addAuthParameters($route->middleware());
 
             foreach ($methods as $method) {
                 $this->method = strtolower($method);
@@ -83,6 +88,24 @@ class Generator
 
         if (!empty($this->config['produces'])) {
             $baseInfo['produces'] = $this->config['produces'];
+        }
+
+        if(!empty($this->auth)) {
+            switch ($this->auth) {
+                case 'jwt':
+                    $baseInfo['securityDefinitions'] = [
+                        'api_key' => [
+                            'type' => 'apiKey',
+                            'name' => 'Authorization',
+                            'in' => 'header'
+                        ]
+                    ];
+                    break;
+                
+                default:
+                    $baseInfo['securityDefinitions'] = [];
+                    break;
+            }
         }
 
         $baseInfo['paths'] = [];
@@ -152,6 +175,24 @@ class Generator
 
             if (is_subclass_of($class, FormRequest::class)) {
                 return (new $class)->rules();
+            }
+        }
+    }
+
+    protected function addAuthParameters($middlewares)
+    {
+        if(!empty($this->auth)) {
+            switch ($this->auth) {
+                case 'jwt':
+                    $hasAuth = array_filter($middlewares, function ($var) { 
+                        return (strpos($var, 'jwt') > -1); 
+                    });
+                    if($hasAuth) {
+                        $this->docs['paths']['security'] = [
+                            'api_key' => []
+                        ];
+                    }
+                    break;
             }
         }
     }
