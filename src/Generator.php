@@ -15,6 +15,8 @@ class Generator
 
     protected $auth;
 
+    protected $host;
+
     protected $docs;
 
     protected $uri;
@@ -25,11 +27,12 @@ class Generator
 
     protected $action;
 
-    public function __construct($config, $routeFilter = null, $auth = null)
+    public function __construct($config, $routeFilter = null, $auth = null, $host = null)
     {
         $this->config = $config;
         $this->routeFilter = $routeFilter;
         $this->auth = $auth;
+        $this->host = $host;
     }
 
     public function generate()
@@ -59,6 +62,8 @@ class Generator
                 
                 $this->generatePath();
 
+                $this->addTags($route->getAction());
+
                 $this->addAuthParameters($route->middleware());
             }
         }
@@ -75,7 +80,7 @@ class Generator
                 'description' => $this->config['description'],
                 'version' => $this->config['appVersion'],
             ],
-            'host' => $this->config['host'],
+            'host' => !empty($this->host) ? $this->host : $this->config['host'],
             'basePath' => $this->config['basePath'],
         ];
 
@@ -136,6 +141,7 @@ class Generator
 
         $this->docs['paths'][$this->uri][$this->method] = [
             'description' => "$methodDescription {$this->uri}",
+            'tags' => [],
             'responses' => [
                 '200' => [
                     'description' => 'OK'
@@ -178,6 +184,23 @@ class Generator
                 return (new $class)->rules();
             }
         }
+    }
+
+    protected function addTags($controllerArray)
+    {
+        $tagName = $this->getControllerName($controllerArray);
+        $this->docs['paths'][$this->uri][$this->method]['tags'][] = $tagName;
+    }
+
+    protected function getControllerName($controllerArray)
+    {
+        $namespaceReplaced = str_replace($controllerArray['namespace']. '\\', '', $controllerArray['controller']);
+        $actionNameReplaced = substr($namespaceReplaced, 0, strpos($namespaceReplaced, '@'));
+        $controllerReplaced = str_replace('Controller', '', $actionNameReplaced);
+        $controllerNameArray = preg_split('/(?=[A-Z])/', $controllerReplaced);
+        $controllerName = trim(implode(' ', $controllerNameArray));
+
+        return $controllerName;
     }
 
     protected function addAuthParameters($middlewares)
