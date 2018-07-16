@@ -51,14 +51,15 @@ class Generator
                 $this->docs['paths'][$this->uri] = [];
             }
 
-            $this->addAuthParameters($route->middleware());
-
+            
             foreach ($methods as $method) {
                 $this->method = strtolower($method);
-
+                
                 if (in_array($this->method, $this->config['ignoredMethods'])) continue;
-
+                
                 $this->generatePath();
+
+                $this->addAuthParameters($route->middleware());
             }
         }
 
@@ -188,7 +189,7 @@ class Generator
                         return (strpos($var, 'jwt') > -1); 
                     });
                     if($hasAuth) {
-                        $this->docs['paths']['security'] = [
+                        $this->docs['paths'][$this->uri][$this->method]['security'] = [
                             'api_key' => []
                         ];
                     }
