@@ -62,6 +62,8 @@ class Generator
                 
                 $this->generatePath();
 
+                $this->addSummary($route->getActionName());
+
                 $this->addTags($route->getAction());
 
                 $this->addAuthParameters($route->middleware());
@@ -180,7 +182,9 @@ class Generator
         $parameters = $reflector->getParameters();
         $docComment = $reflector->getDocComment();
 
-        $this->addDescription($docComment);
+        if($docComment) {
+            $this->addDescription($docComment);
+        }
 
         foreach ($parameters as $parameter) {
             $class = (string) $parameter->getType();
@@ -193,8 +197,8 @@ class Generator
 
     protected function addDescription($docComment)
     {
-        $docDomment = $this->getDescription($docComment);
-        $this->docs['paths'][$this->uri][$this->method]['description'] = $docDomment;
+        $docComment = $this->getDescription($docComment);
+        $this->docs['paths'][$this->uri][$this->method]['description'] = $docComment;
     }
 
     protected function getDescription($docComment)
