@@ -13,8 +13,8 @@ class GenerateSwaggerDoc extends Command
      */
     protected $signature = 'laravel-swagger:generate
                             {--format=json : The format of the output, current options are json and yaml}
-                            {--filter=api : Filter to a specific route prefix, such as /api or /v2/api}
-                            {--auth=jwt : Authentication to be applied globally}
+                            {--filter= : Filter to a specific route prefix, such as /api or /v2/api}
+                            {--auth= : Authentication to be applied globally}
                             {--host= : Host name of the swagger if you wish to change the default}';
 
     /**

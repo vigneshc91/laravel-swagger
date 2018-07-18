@@ -18,6 +18,12 @@ Generating the swagger documentation is easy, simply run `php artisan laravel-sw
 
 If you wish to generate docs for a subset of your routes, you can pass a filter using `--filter`, for example: `php artisan laravel-swagger:generate --filter="/api"`
 
+If you want to change the change the host name, you can pass a host using `--host`,
+for example: `php artisan laravel-swagger:generate --host="localhost/laravel"`
+
+If you want to apply authentication(currently supports only jwt), you can pass a auth using `--auth`,
+for example: `php artisan laravel-swagger:generate --auth="jwt"` 
+
 By default, laravel-swagger prints out the documentation in json format, if you want it in YAML format you can override the format using the `--format` flag. Make sure to have the yaml extension installed if you choose to do so.
 
 Format options are:<br>
