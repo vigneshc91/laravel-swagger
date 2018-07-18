@@ -141,6 +141,7 @@ class Generator
 
         $this->docs['paths'][$this->uri][$this->method] = [
             'description' => "$methodDescription {$this->uri}",
+            'summary' => '',
             'tags' => [],
             'responses' => [
                 '200' => [
@@ -175,7 +176,11 @@ class Generator
 
         $parsedAction = Str::parseCallback($this->action);
 
-        $parameters = (new ReflectionMethod($parsedAction[0], $parsedAction[1]))->getParameters();
+        $reflector = (new ReflectionMethod($parsedAction[0], $parsedAction[1]));
+        $parameters = $reflector->getParameters();
+        $docComment = $reflector->getDocComment();
+
+        $this->addDescription($docComment);
 
         foreach ($parameters as $parameter) {
             $class = (string) $parameter->getType();
@@ -184,6 +189,35 @@ class Generator
                 return (new $class)->rules();
             }
         }
+    }
+
+    protected function addDescription($docComment)
+    {
+        $docDomment = $this->getDescription($docComment);
+        $this->docs['paths'][$this->uri][$this->method]['description'] = $docDomment;
+    }
+
+    protected function getDescription($docComment)
+    {
+        $docCommentParsed = trim(str_replace(array('/', '*'), '', substr($docComment, 0, strpos($docComment, '@'))));
+        $docComment = trim(preg_replace('/\s+/', ' ', $docCommentParsed));
+
+        return $docComment;
+    }
+
+    protected function addSummary($actionName)
+    {
+        $actionName = $this->getActionName($actionName);
+        $this->docs['paths'][$this->uri][$this->method]['summary'] = $actionName;
+    }
+
+    protected function getActionName($actionName)
+    {
+        $actionNameSubString = substr($actionName, strpos($actionName, '@')+1);
+        $actionNameArray = preg_split('/(?=[A-Z])/', ucfirst($actionNameSubString));
+        $actionName = trim(implode(' ', $actionNameArray));
+
+        return $actionName;
     }
 
     protected function addTags($controllerArray)
