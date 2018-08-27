@@ -82,7 +82,7 @@ class Generator
                 'description' => $this->config['description'],
                 'version' => $this->config['appVersion'],
             ],
-            'host' => !empty($this->host) ? $this->host : $this->config['host'],
+            'host' => !is_null($this->host) ? $this->host : $this->config['host'],
             'basePath' => $this->config['basePath'],
         ];
 

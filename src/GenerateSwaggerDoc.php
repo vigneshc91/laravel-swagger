@@ -33,7 +33,7 @@ class GenerateSwaggerDoc extends Command
     {
         $config = config('laravel-swagger');
 
-        $docs = (new Generator($config, $this->option('filter') ?: null, $this->option('auth') ?: null, $this->option('host') ?: null))->generate();
+        $docs = (new Generator($config, $this->option('filter') ?: null, $this->option('auth') ?: null, !is_null($this->option('host')) ? $this->option('host') : null))->generate();
 
         $formattedDocs = (new FormatterManager($docs))
             ->setFormat($this->option('format'))
