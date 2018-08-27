@@ -251,7 +251,9 @@ class Generator
                     });
                     if($hasAuth) {
                         $this->docs['paths'][$this->uri][$this->method]['security'] = [
-                            'api_key' => []
+                            [
+                                'api_key' => []
+                            ]
                         ];
                     }
                     break;
