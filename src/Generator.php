@@ -232,13 +232,15 @@ class Generator
 
     protected function getControllerName($controllerArray)
     {
-        $namespaceReplaced = str_replace($controllerArray['namespace']. '\\', '', $controllerArray['controller']);
-        $actionNameReplaced = substr($namespaceReplaced, 0, strpos($namespaceReplaced, '@'));
-        $controllerReplaced = str_replace('Controller', '', $actionNameReplaced);
-        $controllerNameArray = preg_split('/(?=[A-Z])/', $controllerReplaced);
-        $controllerName = trim(implode(' ', $controllerNameArray));
+        if (isset($controllerArray['namespace']) && isset($controllerArray['controller'])) {
+            $namespaceReplaced = str_replace($controllerArray['namespace']. '\\', '', $controllerArray['controller']);
+            $actionNameReplaced = substr($namespaceReplaced, 0, strpos($namespaceReplaced, '@'));
+            $controllerReplaced = str_replace('Controller', '', $actionNameReplaced);
+            $controllerNameArray = preg_split('/(?=[A-Z])/', $controllerReplaced);
+            $controllerName = trim(implode(' ', $controllerNameArray));
 
-        return $controllerName;
+            return $controllerName;
+        }
     }
 
     protected function addAuthParameters($middlewares)
