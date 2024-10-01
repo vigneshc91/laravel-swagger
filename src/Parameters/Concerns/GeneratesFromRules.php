@@ -1,7 +1,7 @@
 <?php
 
 namespace Vigneshc91\LaravelSwagger\Parameters\Concerns;
-
+use Illuminate\Support\Str;
 trait GeneratesFromRules
 {
     protected function splitRules($rules)
@@ -60,7 +60,7 @@ trait GeneratesFromRules
     private function getInParameter(array $paramRules)
     {
         foreach ($paramRules as $rule) {
-            if (is_string($rule) && starts_with($rule, 'in:')) {
+             if (is_string($rule) && Str::startsWith($rule, 'in:')) {
                 return $rule;
             }
         }
