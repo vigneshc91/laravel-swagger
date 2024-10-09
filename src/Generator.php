@@ -6,6 +6,7 @@ use ReflectionMethod;
 use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class Generator
 {
@@ -178,7 +179,13 @@ class Generator
 
         $parsedAction = Str::parseCallback($this->action);
 
-        $reflector = (new ReflectionMethod($parsedAction[0], $parsedAction[1]));
+         try {
+            $reflector = new ReflectionMethod($parsedAction[0], $parsedAction[1]);
+        } catch (\ReflectionException $e) {
+            Log::info('Parsed Action:', $parsedAction);
+            Log::error('ReflectionException: ' . $e->getMessage());
+            return false;
+        }
         $parameters = $reflector->getParameters();
         $docComment = $reflector->getDocComment();
 
