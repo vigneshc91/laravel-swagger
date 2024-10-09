@@ -182,8 +182,8 @@ class Generator
          try {
             $reflector = new ReflectionMethod($parsedAction[0], $parsedAction[1]);
         } catch (\ReflectionException $e) {
-            Log::info('Parsed Action:', $parsedAction); // No need to wrap in array
-            Log::error('ReflectionException: ' . $e->getMessage()); // Use Log::error for exceptions
+            Log::info('Parsed Action:', $parsedAction);
+            Log::error('ReflectionException: ' . $e->getMessage());
             return false;
         }
         $parameters = $reflector->getParameters();
